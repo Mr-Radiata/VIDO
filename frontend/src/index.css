@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-ink-900 text-white font-body antialiased;
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(168,85,247,0.10), transparent 40%),
+      radial-gradient(circle at 85% 0%, rgba(255,215,0,0.08), transparent 35%),
+      radial-gradient(circle at 50% 100%, rgba(63,224,224,0.06), transparent 45%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+  ::selection {
+    @apply bg-gold-500/30 text-white;
+  }
+  /* visible keyboard focus */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 2px solid #FFD700;
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .glow-text-gold {
+    text-shadow: 0 0 18px rgba(255, 215, 0, 0.55);
+  }
+  .glow-text-cyan {
+    text-shadow: 0 0 18px rgba(63, 224, 224, 0.6);
+  }
+  .card-surface {
+    @apply bg-ink-700/70 border border-white/5 backdrop-blur-sm;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold-500 text-ink-950 font-display font-semibold px-6 py-3 transition-all duration-300 hover:scale-105 hover:shadow-gold-lg active:scale-95;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/15 text-white font-display font-medium px-6 py-3 transition-all duration-300 hover:scale-105 hover:border-gold-500/60 hover:shadow-gold active:scale-95;
+  }
+  .input-dark {
+    @apply w-full rounded-xl bg-ink-800 border border-white/10 px-4 py-3 text-white placeholder-white/30 outline-none transition-colors focus:border-gold-500/60;
+  }
+  .hover-card {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-gold hover:border-gold-500/40;
+  }
+}
+
+/* Custom scrollbar (dark) */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #15171E;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3d47;
+  border-radius: 999px;
+}
+/* Input Number ichidagi xunuk o'qchalarni (spin-button) yo'q qilish */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
