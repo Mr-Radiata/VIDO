@@ -1,0 +1,26 @@
+name: Deploy to Server
+on:
+  push:
+    branches: [ main ] # Agar asosiysi master bo'lsa, master deb yozing
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploying via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd ~/VIDO
+          git pull origin main
+          
+          cd frontend
+          npm install
+          npm run build
+          
+          cd ../backend
+          npm install
+          pm2 restart vido-backend
