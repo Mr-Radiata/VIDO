@@ -4,8 +4,8 @@ import { api, setToken } from '../api'
 
 const AuthContext = createContext(null)
 
-// Socket.io ulanish manzili (Vite muhitidan olinadi yoki default 4000 port)
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000'
+// Socket.io ulanish manzili (Vite muhitidan olinadi)
+const SOCKET_URL = import.meta.env.VITE_API_URL || 'https://getvido.uz'
 export const socket = io(SOCKET_URL, { autoConnect: false }) 
 
 export function AuthProvider({ children }) {
@@ -52,8 +52,8 @@ export function AuthProvider({ children }) {
     }
   }, [user])
 
-  const register = async ({ name, email, password, role }) => {
-    const { token, user } = await api.register({ name, email, password, role })
+  const register = async ({ name, email, password, role, acceptTerms }) => {
+    const { token, user } = await api.register({ name, email, password, role, acceptTerms })
     setToken(token)
     setUser(user)
     return user

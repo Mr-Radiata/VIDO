@@ -1,5 +1,5 @@
-// Vite'da .env faylidan o'zgaruvchilarni olish (agar mavjud bo'lmasa, localhost:4000 ni ishlatadi)
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+// Vite'da .env faylidan o'zgaruvchilarni olish (agar mavjud bo'lmasa, api.getvido.uz ni ishlatadi)
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://getvido.uz';
 
 export const setToken = (token) => {
   if (token) {

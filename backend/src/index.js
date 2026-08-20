@@ -36,9 +36,10 @@ const app = express();
 // SOCKET.IO UCHUN SERVERNI MOSLASHTIRISH
 const httpServer = createServer(app);
 
-const allowedOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+// Ruxsat etilgan domenlarni sozlash (CORS)
+const allowedOrigins = (process.env.CLIENT_ORIGIN || 'https://getvido.uz')
   .split(',')
-  .map((o) => o.trim());
+  .map(url => url.trim());
 
 // JONLI ALOQA (WebSocket) SOZLAMALARI
 export const io = new Server(httpServer, {
@@ -100,7 +101,7 @@ app.use('/uploads/videos', requireAuth, requireRole('admin'), express.static(pat
 app.use('/uploads/processed', (req, res, next) => {
   // So'rov qayerdan kelayotganini tekshiramiz
   const referer = req.get('Referer');
-  const allowedHost = process.env.CLIENT_ORIGIN || 'localhost:5173';
+  const allowedHost = process.env.CLIENT_ORIGIN || 'https://getvido.uz';
 
   // Agar so'rov to'g'ridan-to'g'ri brauzer qidiruviga yozilgan bo'lsa yoki boshqa saytdan kelsa - BLOKLAYMIZ
   if (!referer || !referer.includes(allowedHost.replace(/https?:\/\//, ''))) {
@@ -147,5 +148,5 @@ initCronJobs();
 const PORT = process.env.PORT || 4000;
 
 httpServer.listen(PORT, () => {
-  console.log(`🚀 VIDO backend va Socket.io http://localhost:${PORT} da ishga tushdi`);
+  console.log(`🚀 VIDO backend va Socket.io https://getvido.uz (Port: ${PORT}) da ishga tushdi`);
 });
