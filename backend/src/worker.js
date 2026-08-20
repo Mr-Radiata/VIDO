@@ -71,10 +71,12 @@ const worker = new Worker('video-processing', async (job) => {
       }
     });
 
-    // MANA SHU YER O'ZGARDI 👇 (Blob -> Buffer aylantirish)
-    const blobData = await qrCode.getRawData("png");
-    const arrayBuffer = await blobData.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    // Node.js muhitida getRawData() to'g'ridan-to'g'ri Buffer qaytaradi,
+    // brauzerdagidek Blob emas. Har ikki holatni qo'llab-quvvatlaymiz.
+    const rawData = await qrCode.getRawData("png");
+    const buffer = Buffer.isBuffer(rawData)
+      ? rawData
+      : Buffer.from(await rawData.arrayBuffer());
     await fs.writeFile(qrPath, buffer);
 
     // Qolgan joylar o'zgarishsiz
