@@ -1,7 +1,7 @@
 name: Deploy to Server
 on:
   push:
-    branches: [ main ] # Agar asosiysi master bo'lsa, master deb yozing
+    branches: [ main ]
 
 jobs:
   deploy:
@@ -13,14 +13,21 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
+        command_timeout: 5m
         script: |
           cd ~/VIDO
           git pull origin main
           
-          cd frontend
+          # Backend — avval o'rnatib, vaqtincha to'xtatamiz (RAM bo'shatish uchun)
+          cd backend
           npm install
-          npm run build
           
-          cd ../backend
+          # Frontend — build paytida RAM kam bo'lishi mumkin, shuning uchun
+          # backendni to'xtatib, NODE xotirasini cheklab build qilamiz
+          cd ../frontend
           npm install
+          pm2 stop vido-backend || true
+          NODE_OPTIONS="--max-old-space-size=512" npm run build
+          
+          # Backend — qayta ishga tushiramiz
           pm2 restart vido-backend
