@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { Star, Play, X, BadgeCheck, MessageSquare, Send, AtSign, Tv } from 'lucide-react'
+import { Star, Play, X, BadgeCheck, MessageSquare, Send, AtSign, Tv, LogIn, UserPlus } from 'lucide-react'
 import { api, fileUrl, normalizeStar } from '../api'
 import { useAuth } from '../context/AuthContext'
 
@@ -64,6 +64,7 @@ export default function Profile() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('videos')
   const [selectedVideo, setSelectedVideo] = useState(null)
+  const [showAuthModal, setShowAuthModal] = useState(false)
 
   useEffect(() => {
     if (!id || id === 'undefined') {
@@ -132,7 +133,11 @@ export default function Profile() {
                 <span className="text-white/80">Haftalik buyurtmalari to'lgan!</span>
                 
               </div>
-            ) : (!user || user.role === 'client') ? (
+            ) : !user ? (
+              <button onClick={() => setShowAuthModal(true)} className="btn-gold !py-3.5 !px-8 text-base shadow-gold w-full sm:w-auto text-center">
+                Buyurtma — {formatPrice(star.price)}
+              </button>
+            ) : user.role === 'client' ? (
               <Link to={`/checkout/${star.id}`} className="btn-gold !py-3.5 !px-8 text-base shadow-gold w-full sm:w-auto text-center">
                 Buyurtma — {formatPrice(star.price)}
               </Link>
@@ -220,6 +225,56 @@ export default function Profile() {
           </div>
         )}
       </div>
+
+      {/* AVTORIZATSIYA MODALI — Tizimga kirmagan foydalanuvchilar uchun */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center backdrop-blur-sm p-4" onClick={() => setShowAuthModal(false)}>
+          <div 
+            className="bg-ink-900 border border-white/10 rounded-3xl p-8 max-w-sm w-full shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowAuthModal(false)} 
+              className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gold-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <LogIn size={28} className="text-gold-400" />
+              </div>
+              <h3 className="text-xl font-display font-bold text-white mb-2">
+                Avval tizimga kiring
+              </h3>
+              <p className="text-white/50 text-sm leading-relaxed">
+                <span className="text-white/80 font-medium">{star.name}</span>dan video buyurtma berish uchun tizimga kirish yoki ro'yxatdan o'tish kerak
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Link
+                to="/auth"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-ink-950 bg-gold-500 hover:bg-gold-400 transition-colors text-sm"
+              >
+                <LogIn size={18} />
+                Tizimga kirish
+              </Link>
+              <Link
+                to="/auth?mode=register"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors text-sm"
+              >
+                <UserPlus size={18} />
+                Ro'yxatdan o'tish
+              </Link>
+            </div>
+
+            <p className="text-center text-xs text-white/30 mt-5">
+              Ro'yxatdan o'tish bepul va 30 soniya vaqtingizni oladi
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* YOUTUBE SHORTS USLUBIDAGI PLEYER MODALI */}
       {selectedVideo && (
