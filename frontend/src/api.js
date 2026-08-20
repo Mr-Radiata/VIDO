@@ -81,7 +81,7 @@ export const normalizeStar = (star) => {
 
 export const api = {
   login: (payload) => request('/api/auth/login', { method: 'POST', body: payload }),
-  googleLogin: (token, acceptTerms) => request('/api/auth/google', { method: 'POST', body: { token, acceptTerms } }),
+  googleLogin: (token, acceptTerms, role) => request('/api/auth/google', { method: 'POST', body: { token, acceptTerms, role } }),
   register: (payload) => request('/api/auth/register', { method: 'POST', body: payload }),
   me: () => request('/api/auth/me'),
   getNotifications: () => request('/api/auth/notifications'),

@@ -68,7 +68,7 @@ export default function Auth() {
       setLoading(true);
       
       // 1. Backenddan javobni olamiz
-      const data = await api.googleLogin(credentialResponse.credential, formData.acceptTerms);
+      const data = await api.googleLogin(credentialResponse.credential, formData.acceptTerms, formData.role);
       
       // Axios yoki Fetch ishlatilganiga qarab tokenni aniq ajratib olamiz
       const exactToken = data.token || data.data?.token;
@@ -157,17 +157,29 @@ export default function Auth() {
             </div>
 
             {!isLogin && (
-              <div className="flex items-center gap-2 pt-2">
-                <input 
-                  type="checkbox" 
-                  id="role"
-                  className="accent-gold-500 w-4 h-4 cursor-pointer"
-                  checked={formData.role === 'star'}
-                  onChange={(e) => setFormData({...formData, role: e.target.checked ? 'star' : 'client'})}
-                />
-                <label htmlFor="role" className="text-sm text-white/70 cursor-pointer select-none">
-                  Yulduz sifatida ro'yxatdan o'tish
-                </label>
+              <div className="flex bg-ink-950 p-1 rounded-full border border-white/5 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, role: 'client'})}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-full transition-colors ${
+                    formData.role === 'client' 
+                      ? 'bg-gold-500 text-ink-950 shadow-md' 
+                      : 'text-white/50 hover:text-white'
+                  }`}
+                >
+                  Foydalanuvchi
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, role: 'star'})}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-full transition-colors ${
+                    formData.role === 'star' 
+                      ? 'bg-gold-500 text-ink-950 shadow-md' 
+                      : 'text-white/50 hover:text-white'
+                  }`}
+                >
+                  Yulduz ⭐
+                </button>
               </div>
             )}
 

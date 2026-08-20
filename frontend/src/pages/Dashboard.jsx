@@ -1471,7 +1471,7 @@ function ClientDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-ink-900">
+    <div className="min-h-screen bg-ink-900 pb-[80px] md:pb-0">
       <Navbar />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
         
@@ -1550,6 +1550,51 @@ function ClientDashboard() {
             )}
           </div>
         )}
+      </div>
+
+      {/* MOBIL PASTKI NAVIGATSIYA */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-ink-950/95 backdrop-blur-xl border-t border-white/10 pb-[env(safe-area-inset-bottom)] shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+        <div className="flex justify-around items-center px-4 py-3">
+          <button
+            onClick={() => { setShowSupport(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="relative p-1 flex flex-col items-center justify-center gap-1"
+          >
+            <div className={`transition-all duration-300 ${!showSupport ? 'scale-110 text-white' : 'text-white/40'}`}>
+              <InboxIcon size={24} strokeWidth={!showSupport ? 2.5 : 2} fill={!showSupport ? 'currentColor' : 'none'} />
+            </div>
+            <span className={`w-1 h-1 rounded-full transition-all duration-300 ${!showSupport ? 'bg-gold-500' : 'bg-transparent'}`}></span>
+          </button>
+          <Link
+            to="/browse/all"
+            className="relative p-1 flex flex-col items-center justify-center gap-1"
+          >
+            <div className="text-white/40 transition-all duration-300">
+              <StarIcon size={24} strokeWidth={2} />
+            </div>
+          </Link>
+          <Link
+            to="/browse/all"
+            className="relative p-1 flex flex-col items-center justify-center gap-1"
+          >
+            <div className="w-10 h-10 rounded-full bg-gold-500 flex items-center justify-center text-ink-950 shadow-gold">
+              <Plus size={22} strokeWidth={2.5} />
+            </div>
+          </Link>
+          <button
+            onClick={() => { setShowSupport(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="relative p-1 flex flex-col items-center justify-center gap-1"
+          >
+            <div className={`transition-all duration-300 ${showSupport ? 'scale-110 text-white' : 'text-white/40'}`}>
+              <Headset size={24} strokeWidth={showSupport ? 2.5 : 2} />
+            </div>
+            {supportCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 border border-ink-950 text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full animate-pulse shadow-md">
+                {supportCount}
+              </span>
+            )}
+            <span className={`w-1 h-1 rounded-full transition-all duration-300 ${showSupport ? 'bg-gold-500' : 'bg-transparent'}`}></span>
+          </button>
+        </div>
       </div>
 
       {selectedVideo && (

@@ -157,7 +157,7 @@ router.put('/notifications/:id/read', requireAuth, async (req, res) => {
 
 // GOOGLE AUTH MANTIG'I (TO'LIQ VA TOG'RILANDI)
 router.post('/google', async (req, res) => {
-  const { token, acceptTerms } = req.body;
+  const { token, acceptTerms, role } = req.body;
   try {
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
@@ -176,11 +176,20 @@ router.post('/google', async (req, res) => {
         return res.status(400).json({ error: "Davom etish uchun xizmat shartlarini qabul qilishingiz kerak", requiresTerms: true });
       }
       const dummyPasswordHash = await bcrypt.hash(Math.random().toString(), 10);
+      const userRole = role === 'star' ? 'star' : 'client';
       const result = await pool.query(
         'INSERT INTO users (name, email, avatar_url, role, password_hash) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [name, email.toLowerCase(), picture, 'client', dummyPasswordHash]
+        [name, email.toLowerCase(), picture, userRole, dummyPasswordHash]
       );
       user = result.rows[0];
+
+      if (userRole === 'star') {
+        await pool.query(
+          `INSERT INTO star_profiles (user_id, category, bio, price) VALUES ($1, $2, $3, $4)`,
+          [user.id, 'bloggers', "Salom! Men VIDO platformasida yangi yulduzman.", 100000]
+        );
+      }
+
       await pool.query(
         `INSERT INTO terms_acceptances (user_id, terms_version, ip_address) VALUES ($1, $2, $3)`,
         [user.id, TERMS_VERSION, req.ip]

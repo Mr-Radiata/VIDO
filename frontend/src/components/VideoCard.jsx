@@ -51,7 +51,7 @@ export default function VideoCard({ variant = 'star', star, video }) {
   return (
     <Link
       to={`/profile/${star.id}`}
-      className="group relative shrink-0 w-44 sm:w-52 rounded-2xl overflow-hidden card-surface hover-card border border-white/5"
+      className="group relative w-full rounded-2xl overflow-hidden card-surface hover-card border border-white/5"
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-ink-800">
         <img src={star.avatar ? fileUrl(star.avatar) : '/placeholder.jpg'} alt={star.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
